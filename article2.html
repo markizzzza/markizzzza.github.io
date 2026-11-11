@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Уголовное дело №1 — Чёрный архив</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <style>
+        body { font-family: Georgia, 'Times New Roman', serif; background-color: #4a2323; color: #f5efe6; }
+        .bg-archive-red      { background-color: #5a1f1f !important; }
+        .bg-archive-burgundy { background-color: #4a2323 !important; }
+        .bg-archive-cream    { background-color: #e8e2d4 !important; }
+        .text-archive-gold   { color: #CFD2AA !important; }
+        .text-archive-cream  { color: #f5efe6 !important; }
+        .border-archive-gold { border-color: rgba(201,169,106,.45) !important; }
+        .article-lead        { border-left: 3px solid #c9a96a; }
+        .quote-block         { border-left: 4px solid #c9a96a; background: rgba(0,0,0,.22); }
+        .article-img         { object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+        .read-progress       { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: #c9a96a; z-index: 1080; transition: width .1s linear; }
+        .accordion-button         { background-color: rgba(0,0,0,.22); color: #f5efe6; }
+        .accordion-button:not(.collapsed) { background-color: rgba(201,169,106,.15); color: #c9a96a; }
+        .accordion-button::after  { filter: invert(1); }
+        .accordion-item           { background: transparent; border-color: rgba(201,169,106,.3); color: #f5efe6; }
+        .accordion-body           { color: #dcd3c7; }
+        .nav-logo { height: 60px; width: auto; object-fit: contain; }
+        .dossier-list dt { color: #CFD2AA; font-weight: normal; }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div class="read-progress" id="readProgress"></div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg bg-archive-red py-2">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="cases.html">Архив дел</a></li>
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="faces.html">Лица и группировки</a></li>
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="chronicle.html">Хроника</a></li>
+        </ul>
+
+        <a class="navbar-brand mx-auto" href="index.html">
+            <img src="logo.png" alt="ЧЁРНЫЙ АРХИВ" class="nav-logo">
+        </a>
+
+        <ul class="navbar-nav align-items-center">
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="investigation.html">Расследование</a></li>
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="media.html">Медиатека</a></li>
+            <li class="nav-item ms-3">
+                <button class="btn text-archive-cream p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" style="border: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ================= OFF CANVAS ================= -->
+<div class="offcanvas offcanvas-end bg-secondary text-white" id="menuOffcanvas" tabindex="-1">
+    <div class="offcanvas-header">
+        <h5>Меню</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="index.html">Главная</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="cases.html">Дела</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="documents.html">Документы</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="photoarchive.html">Фотоархив</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="city_stats.html">Сводка по Городу N</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="info.html">Общие сведения</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 py-3" href="contacts.html">Контакты</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ================= MAIN ================= -->
+<main class="flex-grow-1 py-5">
+    <div class="container">
+
+        <!-- хлебные крошки -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none text-archive-gold">Главная</a></li>
+                <li class="breadcrumb-item"><a href="cases.html" class="text-decoration-none text-archive-gold">Архив дел</a></li>
+                <li class="breadcrumb-item active text-archive-cream" aria-current="page">Дело №1</li>
+            </ol>
+        </nav>
+
+        <!-- заголовок -->
+        <header class="mb-5">
+            <p class="text-uppercase small mb-2 text-archive-gold" style="letter-spacing:.15em;">
+                Уголовное дело №1 · Нарколаборатория-рекордсмен
+            </p>
+            <h1 class="display-4 fw-normal mb-3 text-archive-gold">
+                Богатый наследник создал крупнейшую нарколабораторию в России
+            </h1>
+            <p class="fst-italic text-secondary ps-3 article-lead mb-0">
+                Как Никита Воронов, внук топ-менеджера нефтяной компании, организовал производство восьми тонн «соли» стоимостью семь миллиардов рублей — и получил пожизненный срок из-за случайного обхода участкового.
+            </p>
+        </header>
+
+        <div class="row g-5">
+
+            <!-- ================= СТАТЬЯ ================= -->
+            <article class="col-lg-8 lh-lg">
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-5">
+                        <img src="voronov.jpg" alt="Никита Воронов" class="img-fluid w-100 article-img">
+                        <p class="small text-secondary mt-2 mb-0">Фото из материалов уголовного дела</p>
+                    </div>
+                    <div class="col-md-7">
+                        <p class="mb-0">
+                            Никита Воронов родился в 1999 году в городе Кириши в состоятельной семье. Его дед, Валентин Филатов, был успешным топ-менеджером нефтеперерабатывающего завода «Кинеф» и почетным гражданином города[reference:0]. В 2018 году Филатова не стало, и все свое состояние он завещал любимому внуку. К тому времени Воронов успел закончить школу и поступить в вуз, но, проучившись пару семестров, бросил учебу[reference:1].
+                        </p>
+                    </div>
+                </div>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Путь от ночного клуба до наркоторговли</h2>
+                <p class="mb-4">
+                    Вместо спокойной жизни наследник решил заняться бизнесом. Он основал фирму «Фаворит-Альянс», а в 2015 году вместе с женой Еленой (она была старше него на 12 лет) арендовал бизнес-центр и открыл ночной клуб Imperial[reference:2]. Два года спустя клуб прогорел, и Вороновы остались должны владельцу бизнес-центра 1,3 миллиона рублей за аренду[reference:3].
+                </p>
+                <p class="mb-4">
+                    Неудача не смутила Никиту — он открыл таксопарк, куда позвал работать своего друга детства Дмитрия Говорушкина. В отличие от Воронова, у Говорушкина не было богатых родственников: он с отличием закончил педагогический вуз, женился, но так и не смог найти нормальную работу[reference:4]. Работа в таксопарке также оказалась не особо прибыльной — и тогда его владелец внезапно решил попробовать себя в наркоторговле[reference:5].
+                </p>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">«Придет полиция — бегите»</h2>
+                <p class="mb-4">
+                    Подельники задумали готовить наркотик альфа-PVP, больше известный в России как «соль». Руководителем производства Воронов назначил Говорушкина, а сбыт поручил своему 25-летнему другу Станиславу Мохову[reference:6]. Вскоре производство перенесли в цех побольше, а затем пришли к мысли оборудовать полноценную лабораторию в промышленных масштабах.
+                </p>
+                <p class="mb-4">
+                    Идеальным местом оказался просторный ангар в поселке Обуховец, расположенном в 30 километрах от города Тосно. Пустующее помещение, которое подельники купили за 400 тысяч рублей, ранее принадлежало Обуховскому оборонному заводу: во времена СССР там делали огромные поддоны для ракет[reference:7]. Поселок в лесу, ангар за забором — с улицы не видно ничего.
+                </p>
+                <p class="mb-4">
+                    Для ангара подельники купили огромный контейнер, грузовые рефрижераторы, автопогрузчик, химический реактор и пять промышленных миксеров, высота одного из которых составляла 3,5 метра. Часть компонентов приобрели легально, недостающее — в даркнете на маркетплейсе «Гидра»[reference:8]. Воронов дал подельникам четкую инструкцию: <em>«Если на территорию влезут местные жители, гнать под любым предлогом»</em>. На вопрос «А если придут полицейские?» он ответил: <em>«Придет полиция — бегите»</em>[reference:9].
+                </p>
+
+                <div class="quote-block p-4 my-4">
+                    <p class="fst-italic mb-2">
+                        «Я бы сказал, что это выглядело как песочница. В другой части цеха стояли коробки с готовым товаром: вес всей найденной в ангаре "соли" составил около восьми тонн».
+                    </p>
+                    <footer class="blockquote-footer text-secondary mb-0">Дмитрий Говорушкин, участник преступной группы</footer>
+                </div>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Случайная развязка</h2>
+                <p class="mb-4">
+                    20 ноября 2019 года участковый Дмитрий Петров делал обход территории. Он искал нелегальных мигрантов и угонщиков машин и решил заглянуть в большой ангар на окраине поселка[reference:10]. Едва завидев идущего полицейского, находившиеся там Говорушкин, Сурнаков и Каменев бросились бежать, даже не заперев дверь[reference:11].
+                </p>
+                <p class="mb-4">
+                    Вошедший капитан Петров увидел настоящую лабораторию с химическим реактором и промышленными миксерами. На полу на расстеленных клеенках сушилось какое-то вещество, причем в огромном количестве[reference:12]. Вес всей найденной «соли» составил около восьми тонн — крупнее этой партии в России на тот момент еще не изымали[reference:13]. Ее приблизительная стоимость составила около семи миллиардов рублей. Кроме того, следователи изъяли около 80 тонн прекурсоров, которых хватило бы для изготовления еще семи тонн готового вещества[reference:14].
+                </p>
+                <p class="mb-4">
+                    Ночью туда приехал источник «Ленты.ру»: <em>«Горло першит, слезы текут — невозможно находиться. Наркотик собирали совковыми лопатами. Смеялись, ведь обычное изъятие — это 50-100 граммов. Конечно, мы никогда не видели такого масштаба. Работали там двое суток без сна»</em>[reference:15].
+                </p>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Правосудие присяжных</h2>
+                <p class="mb-4">
+                    Осмотрев брошенные у ангара машины, оперативники нашли документы и телефоны, по которым быстро вычислили подозреваемых. Говорушкина и Сурнакова задержали спустя пару часов, а Каменев некоторое время скрывался в лесу, но сильно замерз и сам пошел сдаваться[reference:16]. Никита Воронов вместе с Моховым успели добраться до Белоруссии, но были задержаны в аэропорту Минска при регистрации на рейс в Грузию[reference:17].
+                </p>
+                <p class="mb-4">
+                    Единственным, кто согласился сотрудничать со следствием, стал Дмитрий Говорушкин. По его версии, Воронов солгал ему, что тот якобы будет заниматься производством химических препаратов для промывки газового оборудования. Говорушкин понял, что к чему, слишком поздно[reference:18]. За активное содействие следствию в 2022 году он получил сравнительно мягкий приговор: восемь лет лишения свободы[reference:19].
+                </p>
+                <p class="mb-4">
+                    Остальные обвиняемые попросили суд присяжных и, как могли, пытались разжалобить их. Адвокаты Воронова упирали на то, что у него на иждивении были трое маленьких детей, а также больные жена и бабушка. Защитники Мохова говорили про его маленького ребенка и больную жену, Каменева — про слепого брата, Сурнакова — про больную мать. Причем все обвиняемые утверждали, что оказались обманом вовлечены в наркобизнес[reference:20].
+                </p>
+                <p class="mb-4">
+                    Впрочем, присяжные все равно признали всех четверых виновными. В марте 2023 года Ленинградский облсуд приговорил Сурнакова и Каменева к 17 годам колонии, а Мохова, признанного правой рукой главаря, — к 20[reference:21]. Создатель нарколаборатории-рекордсмена 27-летний Никита Воронов получил пожизненный срок[reference:22].
+                </p>
+
+                <p class="fst-italic text-secondary border-top border-secondary pt-3 mt-4">
+                    Это дело стало одним из самых громких в современной России: масштаб производства поразил даже опытных оперативников, а разоблачение произошло благодаря банальной случайности.
+                </p>
+
+                <!-- навигация по делам -->
+                <div class="d-flex justify-content-between mt-5">
+                    <a href="cases.html" class="btn btn-outline-warning rounded-0">&larr; Все дела</a>
+                    <a href="article.html" class="btn btn-outline-warning rounded-0">Дело №2 &rarr;</a>
+                </div>
+
+                <!-- поделиться -->
+                <div class="mt-4 d-flex flex-wrap gap-2 align-items-center">
+                    <span class="me-2 text-secondary">Поделиться:</span>
+                    <a href="#" class="btn btn-sm btn-outline-warning rounded-0">VK</a>
+                    <a href="#" class="btn btn-sm btn-outline-warning rounded-0">Telegram</a>
+                    <a href="#" class="btn btn-sm btn-outline-warning rounded-0">Скопировать ссылку</a>
+                </div>
+
+            </article>
+
+            <!-- ================= САЙДБАР ================= -->
+            <aside class="col-lg-4">
+
+                <!-- досье -->
+                <div class="bg-black bg-opacity-25 border border-archive-gold p-4 mb-4">
+                    <h5 class="text-uppercase text-archive-gold mb-3" style="letter-spacing:.1em; font-size:.9rem;">Досье</h5>
+                    <dl class="row mb-0 small dossier-list">
+                        <dt class="col-5">Организатор</dt>
+                        <dd class="col-7 mb-2">Никита Воронов</dd>
+
+                        <dt class="col-5">Год рождения</dt>
+                        <dd class="col-7 mb-2">1999</dd>
+
+                        <dt class="col-5">Место</dt>
+                        <dd class="col-7 mb-2">Ленинградская область, п. Обуховец</dd>
+
+                        <dt class="col-5">Продукт</dt>
+                        <dd class="col-7 mb-2">альфа-PVP («соль»)</dd>
+
+                        <dt class="col-5">Объём</dt>
+                        <dd class="col-7 mb-2">8 тонн (стоимость ~7 млрд руб.)</dd>
+
+                        <dt class="col-5">Статус</dt>
+                        <dd class="col-7 mb-0">Пожизненное лишение свободы</dd>
+                    </dl>
+                </div>
+
+                <!-- аккордеон -->
+                <div class="accordion mb-4" id="extraAccordion">
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc1">
+                                Улики и материалы дела
+                            </button>
+                        </h2>
+                        <div id="acc1" class="accordion-collapse collapse" data-bs-parent="#extraAccordion">
+                            <div class="accordion-body small">
+                                Химический реактор, пять промышленных миксеров (высота одного — 3,5 м), грузовые рефрижераторы, автопогрузчик. Изъято 8 тонн готового вещества и 80 тонн прекурсоров.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc2">
+                                Хроника событий
+                            </button>
+                        </h2>
+                        <div id="acc2" class="accordion-collapse collapse" data-bs-parent="#extraAccordion">
+                            <div class="accordion-body small">
+                                <ul class="mb-0 ps-3">
+                                    <li>2019 — аренда ангара в Обуховце</li>
+                                    <li>20 ноября 2019 — случайный обход участкового</li>
+                                    <li>Ноябрь 2019 — задержание подельников в Минске</li>
+                                    <li>Март 2023 — приговор Ленинградского облсуда</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc3">
+                                Связанные персонажи
+                            </button>
+                        </h2>
+                        <div id="acc3" class="accordion-collapse collapse" data-bs-parent="#extraAccordion">
+                            <div class="accordion-body small">
+                                Дмитрий Говорушкин (руководитель производства), Станислав Мохов (сбыт), Николай Сурнаков (логистика), Сергей Каменев (грузчик), Дмитрий Петров (участковый).
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- цитата -->
+                <div class="quote-block p-4">
+                    <p class="fst-italic mb-2">
+                        «Наркотик собирали совковыми лопатами. Смеялись, ведь обычное изъятие — это 50-100 граммов. Конечно, мы никогда не видели такого масштаба».
+                    </p>
+                    <footer class="blockquote-footer text-secondary mb-0">Источник в правоохранительных органах</footer>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+</main>
+
+<footer class="bg-dark text-archive-cream py-5 border-top border-secondary">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4 mb-md-0 d-flex flex-column align-items-center">
+                <img src="котанет.png" alt="МУНПРИЗМА" class="mb-3" 
+                     style="max-height: 100px; width: auto; padding: 5px; ">
+                
+                <h4 class="fs-6 text-uppercase text-archive-gold mb-2" style="letter-spacing:.15em;">ЧЁРНЫЙ АРХИВ</h4>
+                <p class="small text-secondary mb-0">Независимый информационный проект</p>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <a class="d-block text-archive-cream text-decoration-none small mb-1" href="info.html">О нас</a>
+                <a class="d-block text-archive-cream text-decoration-none small" href="info.html">Политика обработки сайта</a>
+            </div>
+            <div class="col-md-4">
+                <h5 class="fs-6 text-uppercase text-archive-gold mb-2" style="letter-spacing:.08em;">Контакты</h5>
+                <p class="small text-secondary mb-1">Свяжитесь с редакцией</p>
+                <a href="contacts.html" class="text-archive-cream text-decoration-none small">Написать нам</a>
+            </div>
+        </div>
+        <div class="row mt-4 pt-3 border-top border-secondary border-opacity-25">
+            <div class="col-12 text-center text-secondary small">
+                <p class="mb-0">Сайт разработан компанией <strong>«МУНПРИЗМА»</strong></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const progress = document.getElementById('readProgress');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+        progress.style.width = scrolled + '%';
+    });
+</script>
+
+</body>
+</html>

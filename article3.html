@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Уголовное дело №3 — Чёрный архив</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <style>
+        body { font-family: Georgia, 'Times New Roman', serif; background-color: #4a2323; color: #f5efe6; }
+        .bg-archive-red      { background-color: #5a1f1f !important; }
+        .bg-archive-burgundy { background-color: #4a2323 !important; }
+        .bg-archive-cream    { background-color: #e8e2d4 !important; }
+        .text-archive-gold   { color: #CFD2AA !important; }
+        .text-archive-cream  { color: #f5efe6 !important; }
+        .border-archive-gold { border-color: rgba(201,169,106,.45) !important; }
+        .article-lead        { border-left: 3px solid #c9a96a; }
+        .quote-block         { border-left: 4px solid #c9a96a; background: rgba(0,0,0,.22); }
+        .article-img         { object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+        .read-progress       { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: #c9a96a; z-index: 1080; transition: width .1s linear; }
+        .accordion-button         { background-color: rgba(0,0,0,.22); color: #f5efe6; }
+        .accordion-button:not(.collapsed) { background-color: rgba(201,169,106,.15); color: #c9a96a; }
+        .accordion-button::after  { filter: invert(1); }
+        .accordion-item           { background: transparent; border-color: rgba(201,169,106,.3); color: #f5efe6; }
+        .accordion-body           { color: #dcd3c7; }
+        .nav-logo { height: 60px; width: auto; object-fit: contain; }
+        .dossier-list dt { color: #CFD2AA; font-weight: normal; }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div class="read-progress" id="readProgress"></div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg bg-archive-red py-2">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="cases.html">Архив дел</a></li>
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="faces.html">Лица и группировки</a></li>
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="chronicle.html">Хроника</a></li>
+        </ul>
+
+        <a class="navbar-brand mx-auto" href="index.html">
+            <img src="logo.png" alt="ЧЁРНЫЙ АРХИВ" class="nav-logo">
+        </a>
+
+        <ul class="navbar-nav align-items-center">
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="investigation.html">Расследование</a></li>
+            <li class="nav-item"><a class="nav-link text-archive-cream" href="media.html">Медиатека</a></li>
+            <li class="nav-item ms-3">
+                <button class="btn text-archive-cream p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" style="border: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ================= OFF CANVAS ================= -->
+<div class="offcanvas offcanvas-end bg-secondary text-white" id="menuOffcanvas" tabindex="-1">
+    <div class="offcanvas-header">
+        <h5>Меню</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="index.html">Главная</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="cases.html">Дела</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="documents.html">Документы</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="photoarchive.html">Фотоархив</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="city_stats.html">Сводка по Городу N</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 border-bottom border-secondary py-3" href="info.html">Общие сведения</a></li>
+            <li class="nav-item"><a class="nav-link text-white text-uppercase fs-5 py-3" href="contacts.html">Контакты</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ================= MAIN ================= -->
+<main class="flex-grow-1 py-5">
+    <div class="container">
+
+        <!-- хлебные крошки -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none text-archive-gold">Главная</a></li>
+                <li class="breadcrumb-item"><a href="cases.html" class="text-decoration-none text-archive-gold">Архив дел</a></li>
+                <li class="breadcrumb-item active text-archive-cream" aria-current="page">Дело №3</li>
+            </ol>
+        </nav>
+
+        <!-- заголовок -->
+        <header class="mb-5">
+            <p class="text-uppercase small mb-2 text-archive-gold" style="letter-spacing:.15em;">
+                Уголовное дело №3 · Пропажа детей в тайге
+            </p>
+            <h1 class="display-4 fw-normal mb-3 text-archive-gold">
+                Братья Кулаковы: исчезновение, которое не могут разгадать 13 лет
+            </h1>
+            <p class="fst-italic text-secondary ps-3 article-lead mb-0">
+                3 ноября 2013 года в поселке Речной Кировской области десятилетний Вова и восьмилетний Сережа Кулаковы вышли погулять и не вернулись. Сотни волонтеров, 123 проверенных водоема, 900 допросов — и ни одного следа. Спустя 13 лет мать пропавших просит перепроверить дело с новыми технологиями.
+            </p>
+        </header>
+
+        <div class="row g-5">
+
+            <!-- ================= СТАТЬЯ ================= -->
+            <article class="col-lg-8 lh-lg">
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-5">
+                        <img src="case3.jpg" alt="Поиски братьев Кулаковых" class="img-fluid w-100 article-img">
+                        <p class="small text-secondary mt-2 mb-0">Кадр из репортажа «Первый городской канал в Кирове»</p>
+                    </div>
+                    <div class="col-md-7">
+                        <p class="mb-0">
+                            Владимир и Сергей Кулаковы росли в многодетной семье. В поселок Речной они переехали вместе с матерью Мариной, ее вторым мужем — сотрудником МВД, и старшими детьми. Позже в семье родилась дочь Мария. Со временем Марина ушла от мужа-полицейского и начала жить с Алексеем Полудиным, который ранее был осужден за убийство и провел в колонии 15 лет[reference:0]. В этом союзе у женщины родился еще один сын — Гриша. Местные жители относились к Полудину хорошо, считали его мастером на все руки[reference:1].
+                        </p>
+                    </div>
+                </div>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Последний день</h2>
+                <p class="mb-4">
+                    3 ноября 2013 года Марина занималась домашними делами, а Алексей Полудин топил баню на соседнем участке. Около полудня Вова и Сережа отпросились гулять. Позже они еще ненадолго забежали домой, пока мать мыла посуду. После этого женщина их больше не видела[reference:2]. Днем домой вернулся Полудин. По словам Марины, он выпил в бане и лег спать. Ближе к вечеру она вышла искать сыновей и поняла, что они исчезли. Разбуженный Полудин рассказал, что после работы в бане сидел в интернете, затем помылся и ушел домой. Детей он тоже не видел[reference:3].
+                </p>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Масштабные поиски и странности</h2>
+                <p class="mb-4">
+                    На поиски в тайге были брошены большие силы — сотни волонтеров из нескольких регионов, спасатели, полицейские, водолазы[reference:4]. Они прочесали не только лес, но и все окрестные реки, пруды и болота — всего 123 водоема. Было проведено около 900 допросов и 350 обысков, но результата это не принесло: мальчики пропали без следа[reference:5]. Волонтеры вспоминают, что явных признаков присутствия детей обнаружить не удалось[reference:6].
+                </p>
+                <p class="mb-4">
+                    Загадочно вели себя собаки, которые участвовали в поисках. Рассказывали, что животное одного из охотников все время петляло вокруг дома мальчиков и отказывалось идти в лес. Пес громко лаял, нервничал, хозяин не мог его успокоить. При этом собаки кинологов брали след детей, но, дойдя до леса, останавливались[reference:7].
+                </p>
+
+                <div class="quote-block p-4 my-4">
+                    <p class="fst-italic mb-2">
+                        «Искать положено 25 лет. Я прекрасно понимаю, что это нереально, но я очень хочу, чтобы проверили всех проходивших по этому делу еще раз».
+                    </p>
+                    <footer class="blockquote-footer text-secondary mb-0">Марина Кулакова, мать пропавших мальчиков[reference:8]</footer>
+                </div>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Подозреваемые и проверки</h2>
+                <p class="mb-4">
+                    Следствие рассматривало несколько версий. Предполагалось, что дети могли погибнуть в лесу или на заболоченной местности, стать жертвами похищения знакомыми людьми либо посторонним преступником[reference:9]. Под подозрение попал и отчим мальчиков Алексей Полудин. Однако проверки, включая исследование на полиграфе, не подтвердили его причастность к исчезновению детей[reference:10].
+                </p>
+                <p class="mb-4">
+                    В поле зрения полицейских также попали бывший зэк и экс-полицейский, которые вели себя подозрительно, но доказать их причастность не удалось. Не помогли в том числе проверки на полиграфе.
+                </p>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Мистические совпадения</h2>
+                <p class="mb-4">
+                    Странности этой истории добавили еще две пропажи людей в этом поселке. За неделю до исчезновения мальчиков в этих же местах пропал местный врач-педиатр, опытный охотник. Он отправился в лес, но так и не добрался до друзей. Через полгода у пруда неподалеку обнаружили его вещи: сапоги, портсигар, зажигалку. Ружья не было. Вдобавок, по слухам, в сапоге нашли часть ноги.
+                </p>
+                <p class="mb-4">
+                    Второй случай произошел через два дня после исчезновения братьев. Еще один местный охотник сначала активно помогал искать мальчиков, а потом тоже пропал. Его тело нашли через полгода. Он утонул в маленькой луже практически на территории поселка. Все выглядело так, будто мужчина просто уснул в воде. Собака, которая всегда сопровождала его в лесу, была рядом. Следствие при этом считает, что два этих случая не связаны с делом братьев.
+                </p>
+
+                <h2 class="h4 fw-normal mt-4 mb-3 text-archive-gold">Новые надежды</h2>
+                <p class="mb-4">
+                    Еще одно странное событие произошло спустя полтора года после исчезновения мальчиков. Дом, где жила семья Кулаковых, и расположенные на участке постройки полностью сгорели. Марина, которая была дома одна с маленьким ребенком, получила серьезные ожоги и попала в больницу. Огонь уничтожил все вещи и, по некоторым предположениям, возможные улики.
+                </p>
+                <p class="mb-4">
+                    Летом 2026 года Марина Кулакова попросила следствие перепроверить материалы дела. Женщина считает, что новые технологии могут раскрыть тайну исчезновения ее детей[reference:11]. «Сейчас Вове было бы 22, Сереже — 21. Я до сих пор верю в то, что мои сыновья живы. Мне так легче», — говорит она[reference:12]. По данным RT, следователи приезжали к матери мальчиков три года назад, но официально поиски до сих пор не прекращены[reference:13].
+                </p>
+                <p class="fst-italic text-secondary border-top border-secondary pt-3 mt-4">
+                    Это дело остается одним из самых загадочных в современной России. Ни одна из версий — от несчастного случая до похищения — не получила подтверждения. Мать пропавших продолжает ждать.
+                </p>
+
+                <!-- навигация по делам -->
+                <div class="d-flex justify-content-between mt-5">
+                    <a href="article.html" class="btn btn-outline-warning rounded-0">&larr; Дело №2</a>
+                    <a href="cases.html" class="btn btn-outline-warning rounded-0">Все дела</a>
+                </div>
+
+                <!-- поделиться -->
+                <div class="mt-4 d-flex flex-wrap gap-2 align-items-center">
+                    <span class="me-2 text-secondary">Поделиться:</span>
+                    <a href="#" class="btn btn-sm btn-outline-warning rounded-0">VK</a>
+                    <a href="#" class="btn btn-sm btn-outline-warning rounded-0">Telegram</a>
+                    <a href="#" class="btn btn-sm btn-outline-warning rounded-0">Скопировать ссылку</a>
+                </div>
+
+            </article>
+
+            <!-- ================= САЙДБАР ================= -->
+            <aside class="col-lg-4">
+
+                <!-- досье -->
+                <div class="bg-black bg-opacity-25 border border-archive-gold p-4 mb-4">
+                    <h5 class="text-uppercase text-archive-gold mb-3" style="letter-spacing:.1em; font-size:.9rem;">Досье</h5>
+                    <dl class="row mb-0 small dossier-list">
+                        <dt class="col-5">Пропавшие</dt>
+                        <dd class="col-7 mb-2">Владимир (10 лет) и Сергей (8 лет) Кулаковы</dd>
+
+                        <dt class="col-5">Дата</dt>
+                        <dd class="col-7 mb-2">3 ноября 2013 года</dd>
+
+                        <dt class="col-5">Место</dt>
+                        <dd class="col-7 mb-2">пос. Речной, Кировская область</dd>
+
+                        <dt class="col-5">Поиски</dt>
+                        <dd class="col-7 mb-2">900 допросов, 350 обысков, 123 водоема</dd>
+
+                        <dt class="col-5">Статус</dt>
+                        <dd class="col-7 mb-0">Дело не закрыто, поиски продолжаются</dd>
+                    </dl>
+                </div>
+
+                <!-- аккордеон -->
+                <div class="accordion mb-4" id="extraAccordion">
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc1">
+                                Версии следствия
+                            </button>
+                        </h2>
+                        <div id="acc1" class="accordion-collapse collapse" data-bs-parent="#extraAccordion">
+                            <div class="accordion-body small">
+                                Несчастный случай в лесу или на болоте; похищение знакомыми; действия постороннего преступника. Отдельно проверялась версия о причастности отчима, но полиграф не подтвердил подозрения[reference:14].
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc2">
+                                Хроника событий
+                            </button>
+                        </h2>
+                        <div id="acc2" class="accordion-collapse collapse" data-bs-parent="#extraAccordion">
+                            <div class="accordion-body small">
+                                <ul class="mb-0 ps-3">
+                                    <li>3 ноября 2013 — мальчики ушли гулять и не вернулись</li>
+                                    <li>Ноябрь 2013 — масштабные поиски, сотни волонтеров</li>
+                                    <li>2014–2015 — повторные поиски, пожар в доме Кулаковых</li>
+                                    <li>2026 — Марина Кулакова просит перепроверить дело</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc3">
+                                Связанные персонажи
+                            </button>
+                        </h2>
+                        <div id="acc3" class="accordion-collapse collapse" data-bs-parent="#extraAccordion">
+                            <div class="accordion-body small">
+                                Марина Кулакова (мать), Алексей Полудин (отчим), Наталья Смородинова (экс-глава поселка), Сергей Ковалёв (бывший замглавы регионального СКР).
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- цитата -->
+                <div class="quote-block p-4">
+                    <p class="fst-italic mb-2">
+                        «Я до сих пор верю в то, что мои сыновья живы. Мне так легче».
+                    </p>
+                    <footer class="blockquote-footer text-secondary mb-0">Марина Кулакова</footer>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+</main>
+
+<footer class="bg-dark text-archive-cream py-5 border-top border-secondary">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4 mb-md-0 d-flex flex-column align-items-center">
+                <img src="котанет.png" alt="МУНПРИЗМА" class="mb-3" 
+                     style="max-height: 100px; width: auto; padding: 5px; ">
+                
+                <h4 class="fs-6 text-uppercase text-archive-gold mb-2" style="letter-spacing:.15em;">ЧЁРНЫЙ АРХИВ</h4>
+                <p class="small text-secondary mb-0">Независимый информационный проект</p>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <a class="d-block text-archive-cream text-decoration-none small mb-1" href="info.html">О нас</a>
+                <a class="d-block text-archive-cream text-decoration-none small" href="info.html">Политика обработки сайта</a>
+            </div>
+            <div class="col-md-4">
+                <h5 class="fs-6 text-uppercase text-archive-gold mb-2" style="letter-spacing:.08em;">Контакты</h5>
+                <p class="small text-secondary mb-1">Свяжитесь с редакцией</p>
+                <a href="contacts.html" class="text-archive-cream text-decoration-none small">Написать нам</a>
+            </div>
+        </div>
+        <div class="row mt-4 pt-3 border-top border-secondary border-opacity-25">
+            <div class="col-12 text-center text-secondary small">
+                <p class="mb-0">Сайт разработан компанией <strong>«МУНПРИЗМА»</strong></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const progress = document.getElementById('readProgress');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+        progress.style.width = scrolled + '%';
+    });
+</script>
+
+</body>
+</html>
